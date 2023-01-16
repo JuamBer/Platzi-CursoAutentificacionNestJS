@@ -12,6 +12,7 @@ import {
 import { AuthService } from '../auth.service';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(AuthGuard('local'))
   login(@Req() req: Request) {
-    return req.user;
+    const user: User = req.user as User;
+    return this.authService.generateJWT(user);
   }
 }
