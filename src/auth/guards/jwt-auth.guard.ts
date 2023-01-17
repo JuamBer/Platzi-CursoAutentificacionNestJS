@@ -12,13 +12,16 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decotador';
 import { ConfigType } from '@nestjs/config';
 import config from 'src/config';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class ApiKeyGuard implements CanActivate {
+export class JWTAuthGuard extends AuthGuard('jwt') {
   constructor(
     private reflector: Reflector,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
-  ) {}
+  ) {
+    super();
+  }
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -26,12 +29,6 @@ export class ApiKeyGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    const request = context.switchToHttp().getRequest<Request>();
-    const authHeader = request.header('Auth');
-    const isAuth = authHeader === this.configService.apiKey;
-    if (!isAuth) {
-      throw new UnauthorizedException('not allow');
-    }
-    return isAuth;
+    return super.canActivate(context);
   }
 }

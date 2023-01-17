@@ -24,14 +24,17 @@ import {
 } from '../dtos/products.dtos';
 import { ProductsService } from './../services/products.service';
 import { AuthGuard } from '@nestjs/passport';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.decotador';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JWTAuthGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'List of products' })
   getProducts(@Query() params: FilterProductsDto) {
     return this.productsService.findAll(params);
@@ -43,6 +46,7 @@ export class ProductsController {
   }
 
   @Get(':productId')
+  @Public()
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId', ParseIntPipe) productId: number) {
     // response.status(200).send({
