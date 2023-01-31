@@ -1,4 +1,4 @@
-# Curso De Fundamentos de NestJS
+# Curso NestJS: Autenticación con Passport y JWT
 
 Material realizado en el curso de "NestJS: Autenticación con Passport y JWT" de [platzi](https://platzi.com/p/JuamBer/curso/2283-nestjs-auth/diploma/detalle/)
 
